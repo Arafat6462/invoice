@@ -1,0 +1,32 @@
+/* * {
+  padding: 0;
+  margin: 0;
+  margin-bottom: 60px;
+ } */
+
+.header {
+  height: 8vh;
+  background-color: rgba(23, 31, 31, 0.705);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* position: fixed; */
+  width: 100%;
+}
+
+.link {
+  color: white;
+  margin: 1rem;
+  text-decoration: none;
+  font-size: 20px;
+  
+}
+
+.link:hover {
+  color: orange;
+}
+
+/* NavLink has active class */
+.header .active {
+  color: yellow;
+}
