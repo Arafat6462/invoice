@@ -38,23 +38,37 @@
   border-radius: 8px;
   border: none;
 }
+.actionButton {
+  display: flex;
+}
 .delete {
   background-color: #dd3439;
   margin: 5px;
   cursor: pointer;
+  font-size: 16px;
+  box-shadow: 0 8px 16px 0 rgba(255, 0, 0, 0.2),
+    0 6px 20px 0 rgba(255, 0, 0, 0.19);
 }
 
 .update {
   background-color: #24a0ed;
   margin: 5px;
   text-decoration: none;
+  font-size: 16px;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 255, 0.2),
+    0 6px 20px 0 rgba(0, 0, 255, 0.2);
+}
+.button:hover {
+  transform: scale(1.05);
 }
 .download {
   background-color: #24a0ed;
-  margin: 5px;
+  margin: 10px;
   text-decoration: none;
   font-size: 18px;
   padding: 10px;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 255, 0.1),
+    0 6px 20px 0 rgba(0, 0, 255, 0.1);
 }
 
 .pagination {

@@ -14,7 +14,7 @@ function Body({ columnName }) {
 
   // Pagenation
   const [currentPage, setCurrentPage] = useState(1);
-  const [postPerPage, setPostPerPage] = useState(8);
+  const [postPerPage, setPostPerPage] = useState(80);
   const lastPostIndex = currentPage * postPerPage;
   const firstPostIndex = lastPostIndex - postPerPage;
   const currentPost = invoiceList.slice(firstPostIndex, lastPostIndex);
@@ -47,7 +47,7 @@ function Body({ columnName }) {
 
   return (
     <div>
-      <h1>Data Table</h1>
+      <h1>Order List</h1>
       {/* Download data as CSV */}
       <CSVLink
         data={invoiceList}
@@ -106,15 +106,7 @@ const TableRow = ({ dataObject, columnName }) => (
     })}
 
     {
-      <td>
-        <button
-          className="button delete"
-          onClick={() => {
-            deleteInvoice(dataObject.id);
-          }}
-        >
-          Delete
-        </button>
+      <td className="actionButton">
         <NavLink
           // onClick={() => {
           //   updateInvoice(dataObject);
@@ -125,16 +117,33 @@ const TableRow = ({ dataObject, columnName }) => (
         >
           Update
         </NavLink>
+        <button
+          className="button delete"
+          onClick={() => {
+            // deleteInvoice(dataObject.id);
+            deleteWarning(dataObject.id);
+          }}
+        >
+          Delete
+        </button>
       </td>
     }
   </tr>
 );
 
+const deleteWarning = (id) => {
+  var result = confirm("Are you sure to delete?");
+  if (result) {
+    deleteInvoice(id);
+  }
+};
+
 // Delete
 const deleteInvoice = (id) => {
-  Axios.delete(`http://localhost:3001/delete/${id}`).then((response) => {
-    setInvoiceList(response.data);
-  });
+  getAllInvoice();
+  // Axios.delete(`http://localhost:3001/delete/${id}`).then((response) => {
+  //   setInvoiceList(response.data);
+  // });
 };
 
 //Update

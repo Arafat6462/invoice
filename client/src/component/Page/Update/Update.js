@@ -318,7 +318,7 @@ const Update = () => {
       </div>
 
       <button type="submit" onClick={UpdateInvoice}>
-        Update Invoice
+        Update Order
       </button>
     </div>
   );

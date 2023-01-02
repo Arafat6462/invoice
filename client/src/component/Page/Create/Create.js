@@ -234,7 +234,7 @@ const Create = () => {
       </div>
 
       <button type="submit" onClick={addInvoice}>
-        Create Invoice
+        Create Order
       </button>
       <div>
         <label>{createStatus}</label>
