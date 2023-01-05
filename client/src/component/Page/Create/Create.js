@@ -2,12 +2,14 @@ import Axios from "axios";
 import React, { useState } from "react";
 import "./Create.css";
 import { useNavigate } from "react-router-dom";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../../config";
 
 const Create = () => {
   const navigate = useNavigate();
 
   //   const [id, setId] = useState(0);
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(new Date().toDateString());
   const [invoice, setInvoice] = useState(0);
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -30,33 +32,67 @@ const Create = () => {
   var createStatus = "";
 
   const addInvoice = () => {
-    Axios.post("http://localhost:3001/create", {
-      // send it to backend from frontend.
+    // Axios.post("http://localhost:3001/create", {
+    //   // send it to backend from frontend.
+    //   date: date,
+    //   invoice: invoice,
+    //   name: name,
+    //   address: address,
+    //   email: email,
+    //   mobile: mobile,
+    //   qty: qty,
+    //   product: product,
+    //   productPrice: productPrice,
+    //   advance: advance,
+    //   update: update,
+    //   deliveryCharge: deliveryCharge,
+    //   deliveryCompany: deliveryCompany,
+    //   remark: remark,
+    //   first_followup: first_followup,
+    //   second_followup: second_followup,
+    //   third_followup: third_followup,
+    //   bkashCost: bkashCost,
+    //   other: other,
+    //   depositToAccount: depositToAccount,
+    // }).then(() => {
+    //   createStatus = "Invoice Create Success";
+    //   console.log(createStatus);
+    //   navigate("/");
+    // });
+
+    addDoc(collection(db, "invoice"), {
       date: date,
-      invoice: invoice,
+      invoice_no: invoice,
       name: name,
       address: address,
       email: email,
       mobile: mobile,
       qty: qty,
       product: product,
-      productPrice: productPrice,
+      product_price: productPrice,
       advance: advance,
       update: update,
-      deliveryCharge: deliveryCharge,
-      deliveryCompany: deliveryCompany,
+      delivery_charge: deliveryCharge,
+      delivery_company: deliveryCompany,
       remark: remark,
       first_followup: first_followup,
       second_followup: second_followup,
       third_followup: third_followup,
-      bkashCost: bkashCost,
+      bkash_cost: bkashCost,
       other: other,
-      depositToAccount: depositToAccount,
-    }).then(() => {
-      createStatus = "Invoice Create Success";
-      console.log(createStatus);
-      navigate("/");
-    });
+      deposit_to_account: depositToAccount,
+      time_stamp: serverTimestamp(),
+    })
+      .then(() => {
+        //Data save Successfully
+        console.log("data submitted");
+        navigate("/");
+      })
+      .catch((error) => {
+        //Failed
+        console.log(error);
+      });
+    console.log(new Date(date).toDateString());
   };
 
   return (
@@ -72,9 +108,10 @@ const Create = () => {
       <div className="field">
         <label>Date</label>
         <input
-          type="text"
-          placeholder="2022-10-27"
-          onChange={(event) => setDate(event.target.value)}
+          type="date"
+          onChange={(event) =>
+            setDate(new Date(event.target.value).toDateString())
+          }
         />
       </div>
       <div className="field">
@@ -150,7 +187,7 @@ const Create = () => {
         />
       </div>
       <div className="field">
-        <label>Update</label>
+        <label>Order Update</label>
         <input
           type="text"
           placeholder="Delivered"

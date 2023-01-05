@@ -2,6 +2,8 @@ import Axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./Update.css";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "../../config";
 
 const Update = () => {
   const getId = useParams(); // getting id from Table.js as getId throuth app.js id.
@@ -41,71 +43,135 @@ const Update = () => {
 
   // Update
   const UpdateInvoice = () => {
-    console.log("update called" + name);
-    Axios.put(`http://localhost:3001/update/${id}`, {
-      // send it to backend from frontend.
-      // id: id,
+    // console.log("update called" + name);
+    // Axios.put(`http://localhost:3001/update/${id}`, {
+    // send it to backend from frontend.
+    // id: id,
+    //   date: date,
+    //   invoice: invoice,
+    //   name: name,
+    //   address: address,
+    //   email: email,
+    //   mobile: mobile,
+    //   qty: qty,
+    //   product: product,
+    //   productPrice: productPrice,
+    //   advance: advance,
+    //   update: update,
+    //   deliveryCharge: deliveryCharge,
+    //   deliveryCompany: deliveryCompany,
+    //   remark: remark,
+    //   first_followup: first_followup,
+    //   second_followup: second_followup,
+    //   third_followup: third_followup,
+    //   bkashCost: bkashCost,
+    //   other: other,
+    //   depositToAccount: depositToAccount,
+    // }).then((response) => {
+    //   if (response) {
+    //     console.log("success");
+    //     navigate("/");
+    //   }
+    // });
+
+    updateDoc(doc(db, "invoice", searchId), {
       date: date,
-      invoice: invoice,
+      invoice_no: invoice,
       name: name,
       address: address,
       email: email,
       mobile: mobile,
       qty: qty,
       product: product,
-      productPrice: productPrice,
+      product_price: productPrice,
       advance: advance,
       update: update,
-      deliveryCharge: deliveryCharge,
-      deliveryCompany: deliveryCompany,
+      delivery_charge: deliveryCharge,
+      delivery_company: deliveryCompany,
       remark: remark,
       first_followup: first_followup,
       second_followup: second_followup,
       third_followup: third_followup,
-      bkashCost: bkashCost,
+      bkash_cost: bkashCost,
       other: other,
-      depositToAccount: depositToAccount,
-    }).then((response) => {
-      if (response) {
-        console.log("success");
+      deposit_to_account: depositToAccount,
+    })
+      .then(() => {
+        //Data save Successfully
+        console.log("data submitted");
         navigate("/");
-      }
-    });
+      })
+      .catch((error) => {
+        //Failed
+        console.log(error);
+      });
   };
 
   // Search
-  const searchInvoice = () => {
-    Axios.get(`http://localhost:3001/search/${searchId}`).then((Response) => {
-      if (Response.data.length != 0) {
-        setSearchResult(Response.data);
-        console.log(typeof Response.data[0].name);
-        console.log("Others : " + Response.data[0].others_vat_tax);
+  const searchInvoice = async () => {
+    // Axios.get(`http://localhost:3001/search/${searchId}`).then((Response) => {
+    //   if (Response.data.length != 0) {
+    //     setSearchResult(Response.data);
+    //     console.log(typeof Response.data[0].name);
+    //     console.log("Others : " + Response.data[0].others_vat_tax);
 
-        setId(Response.data[0].id);
-        setDate(Response.data[0].date);
-        setInvoice(Response.data[0].invoice_no);
-        setName(Response.data[0].name);
-        setAddress(Response.data[0].address);
-        setEmail(Response.data[0].email);
-        setMobile(Response.data[0].mobile);
-        setQty(Response.data[0].qty);
-        setProduct(Response.data[0].product);
-        setProductPrice(Response.data[0].product_price);
-        setAdvance(Response.data[0].advance);
-        setUpdate(Response.data[0].update);
-        setDeliveryCharge(Response.data[0].delivery_charge);
-        setDeliveryCompany(Response.data[0].delivery_company);
-        setRemark(Response.data[0].remarks);
-        setFirst_followup(Response.data[0].first_followup);
-        setSecond_followupId(Response.data[0].second_followup);
-        setThird_followup(Response.data[0].third_followup);
-        setBkashCost(Response.data[0].bkash_cost);
-        setOther(Response.data[0].others_vat_tax);
-        setDepositToAccount(Response.data[0].deposit_to_accounts);
-        setTest(Response.data[0].deposit_to_accounts);
-        console.log(Response.data[0].deposit_to_accounts);
-      } else console.log("Data Not Found");
-    });
+    //     setId(Response.data[0].id);
+    //     setDate(Response.data[0].date);
+    //     setInvoice(Response.data[0].invoice_no);
+    //     setName(Response.data[0].name);
+    //     setAddress(Response.data[0].address);
+    //     setEmail(Response.data[0].email);
+    //     setMobile(Response.data[0].mobile);
+    //     setQty(Response.data[0].qty);
+    //     setProduct(Response.data[0].product);
+    //     setProductPrice(Response.data[0].product_price);
+    //     setAdvance(Response.data[0].advance);
+    //     setUpdate(Response.data[0].update);
+    //     setDeliveryCharge(Response.data[0].delivery_charge);
+    //     setDeliveryCompany(Response.data[0].delivery_company);
+    //     setRemark(Response.data[0].remarks);
+    //     setFirst_followup(Response.data[0].first_followup);
+    //     setSecond_followupId(Response.data[0].second_followup);
+    //     setThird_followup(Response.data[0].third_followup);
+    //     setBkashCost(Response.data[0].bkash_cost);
+    //     setOther(Response.data[0].others_vat_tax);
+    //     setDepositToAccount(Response.data[0].deposit_to_accounts);
+    //     setTest(Response.data[0].deposit_to_accounts);
+    //     console.log(Response.data[0].deposit_to_accounts);
+    //   } else console.log("Data Not Found");
+    // });
+
+    const docRef = doc(db, "invoice", searchId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+
+      // setId(docSnap.data().id);
+      setDate(docSnap.data().date);
+      setInvoice(docSnap.data().invoice_no);
+      setName(docSnap.data().name);
+      setAddress(docSnap.data().address);
+      setEmail(docSnap.data().email);
+      setMobile(docSnap.data().mobile);
+      setQty(docSnap.data().qty);
+      setProduct(docSnap.data().product);
+      setProductPrice(docSnap.data().product_price);
+      setAdvance(docSnap.data().advance);
+      setUpdate(docSnap.data().update);
+      setDeliveryCharge(docSnap.data().delivery_charge);
+      setDeliveryCompany(docSnap.data().delivery_company);
+      setRemark(docSnap.data().remark);
+      setFirst_followup(docSnap.data().first_followup);
+      setSecond_followupId(docSnap.data().second_followup);
+      setThird_followup(docSnap.data().third_followup);
+      setBkashCost(docSnap.data().bkash_cost);
+      setOther(docSnap.data().other);
+      setDepositToAccount(docSnap.data().deposit_to_account);
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+    }
   };
 
   return (
@@ -136,7 +202,7 @@ const Update = () => {
       <div className="field">
         <label>Date</label>
         <input
-          type="text"
+          type="date"
           placeholder="2022-10-27"
           value={date}
           onChange={(event) => setDate(event.target.value)}

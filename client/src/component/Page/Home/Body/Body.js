@@ -3,10 +3,10 @@ import Table from "./Table/Table";
 
 function Body() {
   const columnName = [
-    {
-      heading: "ID",
-      value: "id",
-    },
+    // {
+    //   heading: "ID",
+    //   value: "id",
+    // },
     {
       heading: "Date",
       value: "date",

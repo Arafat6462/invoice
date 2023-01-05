@@ -7,6 +7,21 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { CSVLink } from "react-csv";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 var XLSX = require("xlsx");
+import {
+  collection,
+  doc,
+  setDoc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  startAfter,
+  getDocs,
+  orderBy,
+  limit,
+  where,
+  query,
+} from "firebase/firestore";
+import { db } from "../../../../config";
 
 function Body({ columnName }) {
   const [invoiceList, setInvoiceList] = useState([]);
@@ -16,26 +31,27 @@ function Body({ columnName }) {
 
   // Pagenation
   const [currentPage, setCurrentPage] = useState(1);
-  const [postPerPage, setPostPerPage] = useState(3);
+  const [postPerPage, setPostPerPage] = useState(10);
   const lastPostIndex = currentPage * postPerPage;
   const firstPostIndex = lastPostIndex - postPerPage;
   const currentPost = invoiceList.slice(firstPostIndex, lastPostIndex);
 
   // GET Data
-  const getAllInvoice = () => {
-    Axios.get("http://localhost:3001/invoice").then((response) => {
-      setInvoiceList(response.data);
-      console.log("get invoice");
-    });
+  const getAllInvoice = async () => {
+    // Axios.get("http://localhost:3001/invoice").then((response) => {
+    //   setInvoiceList(response.data);
+    //   console.log("get invoice");
+    // });
+
+    const data = await getDocs(
+      query(collection(db, "invoice"), orderBy("time_stamp", "desc"), limit(50))
+    );
+    setInvoiceList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };
+
   useEffect(() => {
     getAllInvoice();
   }, []);
-
-  // Update
-  const Update = () => {
-    console.log("Update is : ");
-  };
 
   // Download data as XLSX
   const downloadAsXLSX = () => {
@@ -135,7 +151,8 @@ const deleteWarning = (id) => {
 
 // Delete
 const deleteInvoice = (id) => {
-  Axios.delete(`http://localhost:3001/delete/${id}`).then((response) => {});
+  // Axios.delete(`http://localhost:3001/delete/${id}`).then((response) => {});
+  deleteDoc(doc(db, "invoice", id));
 };
 
 export default Body;
