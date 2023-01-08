@@ -4,6 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import "./Update.css";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../config";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Update = () => {
   const getId = useParams(); // getting id from Table.js as getId throuth app.js id.
@@ -20,7 +22,7 @@ const Update = () => {
   }, []);
 
   const [id, setId] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(new Date());
   const [invoice, setInvoice] = useState(0);
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -75,7 +77,7 @@ const Update = () => {
     // });
 
     updateDoc(doc(db, "invoice", searchId), {
-      date: date,
+      date: date.toDateString(),
       invoice_no: invoice,
       name: name,
       address: address,
@@ -148,7 +150,7 @@ const Update = () => {
       console.log("Document data:", docSnap.data());
 
       // setId(docSnap.data().id);
-      setDate(docSnap.data().date);
+      setDate(docSnap.data().date.toDateString());
       setInvoice(docSnap.data().invoice_no);
       setName(docSnap.data().name);
       setAddress(docSnap.data().address);
@@ -199,7 +201,17 @@ const Update = () => {
           onChange={(event) => setId(event.target.value)}
         />
       </div>
-      <div className="field">
+      {/* <div className="field">
+        <label>Date</label>
+        <DatePicker
+          selected={date}
+          onChange={(date) => setDate(date)}
+          isClearable
+          dateFormat="EE, MMMM dd, yyyy "
+          placeholderText="Select date"
+        />
+      </div> */}
+      {/* <div className="field">
         <label>Date</label>
         <input
           type="date"
@@ -207,6 +219,10 @@ const Update = () => {
           value={date}
           onChange={(event) => setDate(event.target.value)}
         />
+      </div> */}
+      <div className="field">
+         <label> {date}</label> 
+         <label> {typeof date}</label> 
       </div>
       <div className="field">
         <label>Invoice No</label>

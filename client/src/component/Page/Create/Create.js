@@ -4,12 +4,14 @@ import "./Create.css";
 import { useNavigate } from "react-router-dom";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../../config";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Create = () => {
   const navigate = useNavigate();
 
   //   const [id, setId] = useState(0);
-  const [date, setDate] = useState(new Date().toDateString());
+  const [date, setDate] = useState(new Date());
   const [invoice, setInvoice] = useState(0);
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -61,7 +63,7 @@ const Create = () => {
     // });
 
     addDoc(collection(db, "invoice"), {
-      date: date,
+      date: date.toDateString(),
       invoice_no: invoice,
       name: name,
       address: address,
@@ -107,13 +109,23 @@ const Create = () => {
       </div> */}
       <div className="field">
         <label>Date</label>
+        <DatePicker
+          selected={date}
+          onChange={(date) => setDate(date)}
+          isClearable
+          dateFormat="EE, MMMM dd, yyyy "
+          placeholderText="Select date"
+        />
+      </div>
+      {/* <div className="field">toISOString
+        <label>Date</label>
         <input
           type="date"
           onChange={(event) =>
             setDate(new Date(event.target.value).toDateString())
           }
         />
-      </div>
+      </div> */}
       <div className="field">
         <label>Invoice No</label>
         <input
