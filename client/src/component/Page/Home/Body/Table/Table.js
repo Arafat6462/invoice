@@ -25,7 +25,9 @@ import { db } from "../../../../config";
 
 function Body({ columnName }) {
   const [invoiceList, setInvoiceList] = useState([]);
+  const [downloadOrder, setDownloadOrder] = useState([]);
   const navigate = useNavigate(); // to redirect the page
+  const [startQueryAfter, setStartQueryAfter] = useState(Object);
 
   console.log("length is : " + invoiceList.length);
 
@@ -40,13 +42,51 @@ function Body({ columnName }) {
   const getAllInvoice = async () => {
     // Axios.get("http://localhost:3001/invoice").then((response) => {
     //   setInvoiceList(response.data);
-    //   console.log("get invoice");
+    console.log("get invoice");
     // });
 
     const data = await getDocs(
-      query(collection(db, "invoice"), orderBy("time_stamp", "desc"), limit(5))
+      query(
+        collection(db, "invoice"),
+        orderBy("time_stamp", "desc"),
+        limit(postPerPage)
+      )
     );
+    // getting last item from limit query
+    const lastVisibleOrder = data.docs[data.docs.length - 1];
+    setStartQueryAfter(lastVisibleOrder);
+
     setInvoiceList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  };
+
+  // Getting more order on scroll
+  const getMoreOrder = async () => {
+    if (startQueryAfter) {
+      const data = await getDocs(
+        query(
+          collection(db, "invoice"),
+          orderBy("time_stamp", "desc"),
+          startAfter(startQueryAfter),
+          limit(postPerPage)
+        )
+      );
+      // getting last item from limit query
+      const lastVisibleOrder = data.docs[data.docs.length - 1];
+      setStartQueryAfter(lastVisibleOrder);
+
+      setInvoiceList([
+        ...invoiceList,
+        ...data.docs.map((doc) => ({ ...doc.data(), id: doc.id })),
+      ]);
+    }
+  };
+
+  // GET All order to download
+  const downloadAllOrder = async () => {
+    const data = await getDocs(
+      query(collection(db, "invoice"), orderBy("time_stamp", "desc"))
+    );
+    setDownloadOrder(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };
 
   useEffect(() => {
@@ -57,35 +97,35 @@ function Body({ columnName }) {
   const downloadAsXLSX = () => {
     console.log("XLSX");
     var wb = XLSX.utils.book_new();
-    var ws = XLSX.utils.json_to_sheet(invoiceList);
+    var ws = XLSX.utils.json_to_sheet(currentPost);
     XLSX.utils.book_append_sheet(wb, ws, "invoice");
-    XLSX.writeFile(wb, "invoice.xlsx");
+    XLSX.writeFile(wb, "Order.xlsx");
+  };
+
+  // Download data as XLSX
+  const downloadAllAsXLSX = () => {
+    downloadAllOrder();
+    var wb = XLSX.utils.book_new();
+    var ws = XLSX.utils.json_to_sheet(downloadOrder);
+    XLSX.utils.book_append_sheet(wb, ws, "invoice");
+    XLSX.writeFile(wb, "Order.xlsx");
   };
 
   return (
     <div>
       <h1>Order List</h1>
       {/* Download data as CSV */}
-      <CSVLink
-        data={invoiceList}
-        filename="Invoice"
-        className="button download"
-      >
+      {/* <CSVLink data={invoiceList} filename="Order" className="button download">
         Download as CSV
-      </CSVLink>
-      {/* Download data as XLS */}
-      <ReactHTMLTableToExcel
-        id="test-table-xls-button"
-        className="button download"
-        table="table"
-        filename="Invoice"
-        sheet="tablexls"
-        buttonText="Download as XLS"
-      />
+      </CSVLink> */}
       {/* Download data as XLSX */}
       <button className="button download" onClick={downloadAsXLSX}>
         {" "}
-        Download as XLSX
+        Download Order
+      </button>
+      <button className="button download" onClick={downloadAllAsXLSX}>
+        {" "}
+        Download All Order
       </button>
       <div>
         <table id="table">
@@ -134,6 +174,7 @@ function Body({ columnName }) {
         totalPost={invoiceList.length}
         postPerPage={postPerPage}
         setCurrentPage={setCurrentPage}
+        getMoreOrder={getMoreOrder}
         currentPage={currentPage}
       />
     </div>

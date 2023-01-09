@@ -1,6 +1,12 @@
 import React from "react";
 
-const Pagination = ({ totalPost, postPerPage, setCurrentPage, currentPage }) => {
+const Pagination = ({
+  totalPost,
+  postPerPage,
+  setCurrentPage,
+  currentPage,
+  getMoreOrder,
+}) => {
   let pages = [];
 
   for (let i = 1; i <= Math.ceil(totalPost / postPerPage); i++) {
@@ -19,6 +25,13 @@ const Pagination = ({ totalPost, postPerPage, setCurrentPage, currentPage }) => 
           </button>
         );
       })}
+      <button
+        // key={index}
+        onClick={() => getMoreOrder()}
+        className="buttonNext"
+      >
+        Next
+      </button>
     </div>
   );
 };
