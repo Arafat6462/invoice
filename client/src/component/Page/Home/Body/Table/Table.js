@@ -28,6 +28,7 @@ function Body({ columnName }) {
   const [downloadOrder, setDownloadOrder] = useState([]);
   const navigate = useNavigate(); // to redirect the page
   const [startQueryAfter, setStartQueryAfter] = useState(Object);
+  const [lastOrderFlag, setLastOrderFlag] = useState(true);
 
   console.log("length is : " + invoiceList.length);
 
@@ -78,7 +79,8 @@ function Body({ columnName }) {
         ...invoiceList,
         ...data.docs.map((doc) => ({ ...doc.data(), id: doc.id })),
       ]);
-    }
+      setLastOrderFlag(true);
+    } else setLastOrderFlag(false);
   };
 
   // GET All order to download
@@ -176,6 +178,7 @@ function Body({ columnName }) {
         setCurrentPage={setCurrentPage}
         getMoreOrder={getMoreOrder}
         currentPage={currentPage}
+        lastOrderFlag={lastOrderFlag}
       />
     </div>
   );

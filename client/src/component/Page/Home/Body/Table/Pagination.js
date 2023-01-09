@@ -6,6 +6,7 @@ const Pagination = ({
   setCurrentPage,
   currentPage,
   getMoreOrder,
+  lastOrderFlag,
 }) => {
   let pages = [];
 
@@ -28,9 +29,8 @@ const Pagination = ({
       <button
         // key={index}
         onClick={() => getMoreOrder()}
-        className="buttonNext"
-      >
-        Next
+        className={lastOrderFlag ? "buttonNext" : "buttonNextEnd"}
+      >Next page
       </button>
     </div>
   );

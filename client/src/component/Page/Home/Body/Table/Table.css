@@ -94,13 +94,15 @@
 
 .pagination button.active {
   font-weight: 900;
-  border-color: rgb(230, 208, 14);
+  border-color: #ffffff00;
   background: #24a0ed;
   color: #fff;
+  box-shadow: 0 8px 8px 0 rgba(0, 0, 255, 0.2),
+    0 6px 10px 0 rgba(0, 0, 255, 0.2);
 }
 
-.pagination .buttonNext{
-  width: 60px;
+.pagination .buttonNext {
+  width: 100px;
   height: 40px;
   font-family: inherit;
   font-weight: 600;
@@ -112,4 +114,18 @@
   background: #ffffff;
   color: rgb(0, 0, 0);
   border-color: #d85e26;
+}
+.pagination .buttonNextEnd {
+  width: 100px;
+  height: 40px;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 16px;
+  margin: 0 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #ffffff;
+  color: rgb(187, 182, 177);
+  border-color: #ffffff;
 }
