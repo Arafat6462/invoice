@@ -90,8 +90,8 @@ function Body() {
   ];
 
   return (
-    <div>
-      <Table columnName={columnName} />
+    <div key={4}>
+      <Table columnName={columnName}  />
     </div>
   );
 }

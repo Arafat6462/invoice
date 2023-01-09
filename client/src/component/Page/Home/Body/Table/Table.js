@@ -44,7 +44,7 @@ function Body({ columnName }) {
     // });
 
     const data = await getDocs(
-      query(collection(db, "invoice"), orderBy("time_stamp", "desc"), limit(50))
+      query(collection(db, "invoice"), orderBy("time_stamp", "desc"), limit(5))
     );
     setInvoiceList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };

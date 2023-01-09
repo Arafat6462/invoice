@@ -22,7 +22,7 @@ const Update = () => {
   }, []);
 
   const [id, setId] = useState("");
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(new Date().toDateString());
   const [invoice, setInvoice] = useState(0);
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -77,7 +77,7 @@ const Update = () => {
     // });
 
     updateDoc(doc(db, "invoice", searchId), {
-      date: date.toDateString(),
+      date: date,
       invoice_no: invoice,
       name: name,
       address: address,
@@ -150,7 +150,7 @@ const Update = () => {
       console.log("Document data:", docSnap.data());
 
       // setId(docSnap.data().id);
-      setDate(docSnap.data().date.toDateString());
+      setDate(docSnap.data().date);
       setInvoice(docSnap.data().invoice_no);
       setName(docSnap.data().name);
       setAddress(docSnap.data().address);
@@ -201,29 +201,17 @@ const Update = () => {
           onChange={(event) => setId(event.target.value)}
         />
       </div>
-      {/* <div className="field">
+      <div className="field">
         <label>Date</label>
         <DatePicker
-          selected={date}
-          onChange={(date) => setDate(date)}
+          selected={new Date(date)}
+          onChange={(date) => setDate(date.toDateString())}
           isClearable
           dateFormat="EE, MMMM dd, yyyy "
           placeholderText="Select date"
         />
-      </div> */}
-      {/* <div className="field">
-        <label>Date</label>
-        <input
-          type="date"
-          placeholder="2022-10-27"
-          value={date}
-          onChange={(event) => setDate(event.target.value)}
-        />
-      </div> */}
-      <div className="field">
-         <label> {date}</label> 
-         <label> {typeof date}</label> 
       </div>
+
       <div className="field">
         <label>Invoice No</label>
         <input
