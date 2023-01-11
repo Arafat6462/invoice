@@ -1,0 +1,44 @@
+.searchArea {
+  display: flex;
+  /* background-color: rgb(255, 255, 255); */
+  height: 50px;
+  
+}
+.searchInput {
+  color: rgb(0, 0, 0);
+  text-align: center;
+  font-size: 18px;
+  background-color: rgba(199, 194, 194, 0.507);
+  margin: 0px;
+  padding: 0px;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  /* box-shadow: 0 8px 16px 0 rgba(255, 30, 0, 0.05),
+  0 6px 20px 0 rgba(255, 30, 0, 0.05); */
+}
+
+/* Style the select element */
+select {
+  width: 120px;
+  padding: 12px;
+  border: none;
+  background-color: orange;
+  border: none;
+  font-size: 18px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+/* Style the options */
+option {
+  /* padding: 12px; */
+  background-color: rgb(218, 241, 247);
+}
+
+/* Style the selected option */
+option:checked {
+  background-color: #4caf50;
+  color: white;
+}

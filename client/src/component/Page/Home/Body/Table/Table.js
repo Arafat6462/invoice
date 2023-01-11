@@ -2,6 +2,7 @@ import React from "react";
 import "./Table.css";
 import Axios from "axios";
 import Pagination from "./Pagination";
+import SearchOrder from "./SearchOrder";
 import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { CSVLink } from "react-csv";
@@ -30,11 +31,11 @@ function Body({ columnName }) {
   const [startQueryAfter, setStartQueryAfter] = useState(Object);
   const [lastOrderFlag, setLastOrderFlag] = useState(true);
 
-  console.log("length is : " + invoiceList.length);
+  // console.log("Order length is : " + invoiceList.length);
 
   // Pagenation
   const [currentPage, setCurrentPage] = useState(1);
-  const [postPerPage, setPostPerPage] = useState(10);
+  const [postPerPage, setPostPerPage] = useState(20);
   const lastPostIndex = currentPage * postPerPage;
   const firstPostIndex = lastPostIndex - postPerPage;
   const currentPost = invoiceList.slice(firstPostIndex, lastPostIndex);
@@ -43,7 +44,7 @@ function Body({ columnName }) {
   const getAllInvoice = async () => {
     // Axios.get("http://localhost:3001/invoice").then((response) => {
     //   setInvoiceList(response.data);
-    console.log("get invoice");
+    console.log("get order");
     // });
 
     const data = await getDocs(
@@ -123,6 +124,9 @@ function Body({ columnName }) {
         Download as CSV
       </CSVLink> */}
       {/* Download data as XLSX */}
+
+      <SearchOrder />
+
       <button className="button download" onClick={downloadAsXLSX}>
         {" "}
         Download Order

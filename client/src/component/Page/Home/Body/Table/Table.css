@@ -69,12 +69,13 @@
   padding: 10px;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 255, 0.1),
     0 6px 20px 0 rgba(0, 0, 255, 0.1);
+    cursor: pointer;
 }
 
 .pagination {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 1rem;
+  margin-top: 3rem;
   justify-content: center;
 }
 .pagination button {
