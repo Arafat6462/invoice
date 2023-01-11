@@ -31,6 +31,10 @@ function Body({ columnName }) {
   const [startQueryAfter, setStartQueryAfter] = useState(Object);
   const [lastOrderFlag, setLastOrderFlag] = useState(true);
 
+  const [searchInput, setSearchInput] = useState("");
+  const [searchField, setSearchField] = useState("");
+  const [filterInvoice, setFilterInvoice] = useState([]);
+
   // console.log("Order length is : " + invoiceList.length);
 
   // Pagenation
@@ -38,7 +42,7 @@ function Body({ columnName }) {
   const [postPerPage, setPostPerPage] = useState(20);
   const lastPostIndex = currentPage * postPerPage;
   const firstPostIndex = lastPostIndex - postPerPage;
-  const currentPost = invoiceList.slice(firstPostIndex, lastPostIndex);
+  const currentPost = filterInvoice.slice(firstPostIndex, lastPostIndex);
 
   // GET Data
   const getAllInvoice = async () => {
@@ -59,6 +63,7 @@ function Body({ columnName }) {
     setStartQueryAfter(lastVisibleOrder);
 
     setInvoiceList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    setFilterInvoice(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };
 
   // Getting more order on scroll
@@ -80,6 +85,10 @@ function Body({ columnName }) {
         ...invoiceList,
         ...data.docs.map((doc) => ({ ...doc.data(), id: doc.id })),
       ]);
+      setFilterInvoice([
+        ...filterInvoice,
+        ...data.docs.map((doc) => ({ ...doc.data(), id: doc.id })),
+      ]);
       setLastOrderFlag(true);
     } else setLastOrderFlag(false);
   };
@@ -88,6 +97,21 @@ function Body({ columnName }) {
     getAllInvoice();
   }, []);
 
+  // Filter order inside table
+  useEffect(() => {
+    if (searchField == "") setSearchField("name"); // in first load default search field
+    if (searchInput == "") setFilterInvoice(invoiceList);
+    else {
+      setFilterInvoice(
+        invoiceList.filter((invoice) => {
+          return invoice[`${searchField.toLowerCase()}`]
+            .toString()
+            .toLowerCase()
+            .includes(searchInput.toLowerCase());
+        })
+      );
+    }
+  }, [searchInput, searchField]);
   // Download data as XLSX
   const downloadAsXLSX = () => {
     console.log("XLSX");
@@ -125,7 +149,11 @@ function Body({ columnName }) {
       </CSVLink> */}
       {/* Download data as XLSX */}
 
-      <SearchOrder />
+      <SearchOrder
+        setSearchInput={setSearchInput}
+        setSearchField={setSearchField}
+        searchField={searchField}
+      />
 
       <button className="button download" onClick={downloadAsXLSX}>
         {" "}

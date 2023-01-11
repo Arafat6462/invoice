@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./SearchOrder.css";
 
-const SearchOrder = () => {
+const SearchOrder = ({ setSearchInput, setSearchField, searchField }) => {
   const options = [
     "Name",
     "Date",
@@ -11,18 +11,18 @@ const SearchOrder = () => {
     "Address",
     "Update",
   ];
-  const [selectedOption, setSelectedOption] = useState("");
+  //   const [selectedOption, setSelectedOption] = useState("");
   return (
     <div className="searchArea">
       <input
         className="searchInput"
         placeholder="Search"
-        // onChange={(event) => setSearchId(event.target.value)}
+        onChange={(event) => setSearchInput(event.target.value)}
       />
       <select
         className="searchOption"
-        value={selectedOption}
-        onChange={(e) => setSelectedOption(e.target.value)}
+        value={searchField}
+        onChange={(e) => setSearchField(e.target.value)}
       >
         {options.map((option, index) => (
           <option key={index} value={option}>
