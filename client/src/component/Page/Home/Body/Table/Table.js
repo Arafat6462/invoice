@@ -34,12 +34,13 @@ function Body({ columnName }) {
   const [searchInput, setSearchInput] = useState("");
   const [searchField, setSearchField] = useState("");
   const [filterInvoice, setFilterInvoice] = useState([]);
+  const options = [10, 20, 50, 100, 2000];
 
   // console.log("Order length is : " + invoiceList.length);
 
   // Pagenation
   const [currentPage, setCurrentPage] = useState(1);
-  const [postPerPage, setPostPerPage] = useState(20);
+  const [postPerPage, setPostPerPage] = useState(10);
   const lastPostIndex = currentPage * postPerPage;
   const firstPostIndex = lastPostIndex - postPerPage;
   const currentPost = filterInvoice.slice(firstPostIndex, lastPostIndex);
@@ -95,7 +96,7 @@ function Body({ columnName }) {
 
   useEffect(() => {
     getAllInvoice();
-  }, []);
+  }, [postPerPage]);
 
   // Filter order inside table
   useEffect(() => {
@@ -110,6 +111,7 @@ function Body({ columnName }) {
             .includes(searchInput.toLowerCase());
         })
       );
+      setCurrentPage(1);
     }
   }, [searchInput, searchField]);
   // Download data as XLSX
@@ -163,6 +165,20 @@ function Body({ columnName }) {
         {" "}
         Download All Order
       </button>
+      <div className="orderPerPage">
+        <text className="orderPerPageText">Order par page : </text>
+        <select
+          className="orderPerPageSelect"
+          value={postPerPage}
+          onChange={(e) => setPostPerPage(e.target.value)}
+        >
+          {options.map((option, index) => (
+            <option key={index} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      </div>
       <div>
         <table id="table">
           <thead>

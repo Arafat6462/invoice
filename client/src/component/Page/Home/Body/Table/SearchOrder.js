@@ -20,7 +20,7 @@ const SearchOrder = ({ setSearchInput, setSearchField, searchField }) => {
         onChange={(event) => setSearchInput(event.target.value)}
       />
       <select
-        className="searchOption"
+        className="searchOption select"
         value={searchField}
         onChange={(e) => setSearchField(e.target.value)}
       >

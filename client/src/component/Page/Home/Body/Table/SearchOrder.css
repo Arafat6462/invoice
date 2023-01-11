@@ -20,7 +20,7 @@
 }
 
 /* Style the select element */
-select {
+.select {
   width: 120px;
   padding: 12px;
   border: none;
