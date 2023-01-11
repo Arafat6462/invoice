@@ -83,14 +83,6 @@ function Body({ columnName }) {
     } else setLastOrderFlag(false);
   };
 
-  // GET All order to download
-  const downloadAllOrder = async () => {
-    const data = await getDocs(
-      query(collection(db, "invoice"), orderBy("time_stamp", "desc"))
-    );
-    setDownloadOrder(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-  };
-
   useEffect(() => {
     getAllInvoice();
   }, []);
@@ -104,14 +96,24 @@ function Body({ columnName }) {
     XLSX.writeFile(wb, "Order.xlsx");
   };
 
-  // Download data as XLSX
-  const downloadAllAsXLSX = () => {
-    downloadAllOrder();
-    var wb = XLSX.utils.book_new();
-    var ws = XLSX.utils.json_to_sheet(downloadOrder);
-    XLSX.utils.book_append_sheet(wb, ws, "invoice");
-    XLSX.writeFile(wb, "Order.xlsx");
+  // GET All order to download
+  const downloadAllOrder = async () => {
+    const data = await getDocs(
+      query(collection(db, "invoice"), orderBy("time_stamp", "desc"))
+    );
+    setDownloadOrder(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };
+
+  // Download data as XLSX
+  useEffect(() => {
+    if (downloadOrder != "") {
+      console.log("use effect");
+      var wb = XLSX.utils.book_new();
+      var ws = XLSX.utils.json_to_sheet(downloadOrder);
+      XLSX.utils.book_append_sheet(wb, ws, "invoice");
+      XLSX.writeFile(wb, "Order.xlsx");
+    }
+  }, [downloadOrder]);
 
   return (
     <div>
@@ -125,7 +127,7 @@ function Body({ columnName }) {
         {" "}
         Download Order
       </button>
-      <button className="button download" onClick={downloadAllAsXLSX}>
+      <button className="button download" onClick={downloadAllOrder}>
         {" "}
         Download All Order
       </button>
