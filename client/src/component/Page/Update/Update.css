@@ -40,3 +40,21 @@ input[type="submit"]:hover {
 ::placeholder {
   color: rgba(128, 128, 128, 0.5);
 }
+
+
+/* This is the style of our error messages */
+.error {
+  width: 100%;
+  padding: 0;
+
+  font-size: 100%;
+  color: rgb(199, 20, 20);
+  /* background-color: #900; */
+  /* border-radius: 0 0 5px 5px; */
+
+  box-sizing: border-box;
+}
+
+.error.active {
+  padding: 0.8em;
+}

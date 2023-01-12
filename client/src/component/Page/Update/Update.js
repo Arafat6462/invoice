@@ -16,6 +16,12 @@ const Update = () => {
   const [searchId, setSearchId] = useState(getId.id);
   const [searchResult, setSearchResult] = useState([""]);
 
+  let requiredFlag = true;
+  const [emptyErrorInvoice, setEmptyErrorInvoice] = useState("");
+  const [emptyErrorQty, setEmptyErrorQty] = useState("");
+  const [emptyErrorName, setEmptyErrorName] = useState("");
+  const [emptyErrorMobile, setEmptyErrorMobile] = useState("");
+
   // load info
   useEffect(() => {
     searchInvoice();
@@ -23,7 +29,7 @@ const Update = () => {
 
   const [id, setId] = useState("");
   const [date, setDate] = useState(new Date().toDateString());
-  const [invoice, setInvoice] = useState(0);
+  const [invoice, setInvoice] = useState("0");
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
@@ -76,37 +82,56 @@ const Update = () => {
     //   }
     // });
 
-    updateDoc(doc(db, "invoice", searchId), {
-      date: date,
-      invoice_no: invoice,
-      name: name,
-      address: address,
-      email: email,
-      mobile: mobile,
-      qty: qty,
-      product: product,
-      product_price: productPrice,
-      advance: advance,
-      update: update,
-      delivery_charge: deliveryCharge,
-      delivery_company: deliveryCompany,
-      remark: remark,
-      first_followup: first_followup,
-      second_followup: second_followup,
-      third_followup: third_followup,
-      bkash_cost: bkashCost,
-      other: other,
-      deposit_to_account: depositToAccount,
-    })
-      .then(() => {
-        //Data save Successfully
-        console.log("data submitted");
-        navigate("/");
+    if (invoice == "") {
+      requiredFlag = false;
+      setEmptyErrorInvoice("Invoice can't be empty");
+    }
+    if (qty == "") {
+      requiredFlag = false;
+      setEmptyErrorQty("Qty can't be empty");
+    }
+    if (mobile == "") {
+      requiredFlag = false;
+      setEmptyErrorMobile("Mobile can't be empty");
+    }
+    if (name == "") {
+      requiredFlag = false;
+      setEmptyErrorName("Name can't be empty");
+    }
+
+    if (requiredFlag) {
+      updateDoc(doc(db, "invoice", searchId), {
+        date: date,
+        invoice_no: invoice,
+        name: name,
+        address: address,
+        email: email,
+        mobile: mobile,
+        qty: qty,
+        product: product,
+        product_price: productPrice,
+        advance: advance,
+        update: update,
+        delivery_charge: deliveryCharge,
+        delivery_company: deliveryCompany,
+        remark: remark,
+        first_followup: first_followup,
+        second_followup: second_followup,
+        third_followup: third_followup,
+        bkash_cost: bkashCost,
+        other: other,
+        deposit_to_account: depositToAccount,
       })
-      .catch((error) => {
-        //Failed
-        console.log(error);
-      });
+        .then(() => {
+          //Data save Successfully
+          console.log("data submitted");
+          navigate("/");
+        })
+        .catch((error) => {
+          //Failed
+          console.log(error);
+        });
+    }
   };
 
   // Search
@@ -214,21 +239,35 @@ const Update = () => {
 
       <div className="field">
         <label>Invoice No</label>
+        <span className="error"> *</span>
         <input
           type="number"
           placeholder="6"
           value={invoice}
-          onChange={(event) => setInvoice(event.target.value)}
+          onChange={(event) => {
+            setInvoice(event.target.value);
+            setEmptyErrorInvoice("");
+          }}
         />
+        <span className="error" aria-live="polite">
+          {emptyErrorInvoice}
+        </span>
       </div>
       <div className="field">
         <label>Name</label>
+        <span className="error"> *</span>
         <input
           type="text"
           placeholder="Arafat"
           value={name}
-          onChange={(event) => setName(event.target.value)}
+          onChange={(event) => {
+            setName(event.target.value);
+            setEmptyErrorName("");
+          }}
         />
+        <span className="error" aria-live="polite">
+          {emptyErrorName}
+        </span>
       </div>
       <div className="field">
         <label>Address</label>
@@ -250,21 +289,35 @@ const Update = () => {
       </div>
       <div className="field">
         <label>Mobile</label>
+        <span className="error"> *</span>
         <input
           type="number"
           placeholder="01777766332"
           value={mobile}
-          onChange={(event) => setMobile(event.target.value)}
+          onChange={(event) => {
+            setMobile(event.target.value);
+            setEmptyErrorMobile("");
+          }}
         />
+        <span className="error" aria-live="polite">
+          {emptyErrorMobile}
+        </span>
       </div>
       <div className="field">
         <label>QTY</label>
+        <span className="error"> *</span>
         <input
           type="number"
           placeholder="3"
           value={qty}
-          onChange={(event) => setQty(event.target.value)}
+          onChange={(event) => {
+            setQty(event.target.value);
+            setEmptyErrorQty("");
+          }}
         />
+        <span className="error" aria-live="polite">
+          {emptyErrorQty}
+        </span>
       </div>
       <div className="field">
         <label>Product</label>

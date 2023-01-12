@@ -70,7 +70,7 @@ function Body({ columnName }) {
     setFilterInvoice(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };
 
-  // Getting more order on scroll
+  // Getting more order on button click
   const getMoreOrder = async () => {
     if (startQueryAfter) {
       const data = await getDocs(
@@ -103,7 +103,7 @@ function Body({ columnName }) {
 
   // Query
   const queryOrder = async (searchField, searchInput) => {
-    console.log("call query order");
+    console.log("call query order by : " + searchField + " : " + searchInput);
 
     const CamelCase =
       searchInput.charAt(0).toUpperCase() + searchInput.slice(1);
@@ -132,7 +132,7 @@ function Body({ columnName }) {
         // startAt(searchInput.toLowerCase()),
         // startAt(searchInput.toUpperCase()),
         endAt(searchInput + "~"),
-        endAt(CamelCase + "~"),
+        endAt(CamelCase + "~")
         // endAt(searchInput.toLowerCase() + "~"),
         // endAt(searchInput.toUpperCase() + "~")
         // endAt(searchInput + "~")
@@ -147,7 +147,7 @@ function Body({ columnName }) {
 
   // Filter order inside table
   useEffect(() => {
-    if (searchField == "") setSearchField("name"); // in first load default search field
+    if (searchField == "") setSearchField("invoice_no"); // in first load default search field
     if (searchInput == "") setFilterInvoice(invoiceList);
     else {
       // setFilterInvoice(
@@ -214,7 +214,7 @@ function Body({ columnName }) {
         Download All Order
       </button>
       <div className="orderPerPage">
-        <text className="orderPerPageText">Order par page : </text>
+        <div className="orderPerPageText">Order par page : </div>
         <select
           className="orderPerPageSelect"
           value={postPerPage}

@@ -10,14 +10,20 @@ import "react-datepicker/dist/react-datepicker.css";
 const Create = () => {
   const navigate = useNavigate();
 
+  let requiredFlag = true;
+  const [emptyErrorInvoice, setEmptyErrorInvoice] = useState("");
+  const [emptyErrorQty, setEmptyErrorQty] = useState("");
+  const [emptyErrorName, setEmptyErrorName] = useState("");
+  const [emptyErrorMobile, setEmptyErrorMobile] = useState("");
+
   //   const [id, setId] = useState(0);
   const [date, setDate] = useState(new Date());
-  const [invoice, setInvoice] = useState(0);
+  const [invoice, setInvoice] = useState("");
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
-  const [mobile, setMobile] = useState(0);
-  const [qty, setQty] = useState(0);
+  const [mobile, setMobile] = useState("");
+  const [qty, setQty] = useState("");
   const [product, setProduct] = useState("");
   const [productPrice, setProductPrice] = useState(0);
   const [advance, setAdvance] = useState(0);
@@ -62,39 +68,57 @@ const Create = () => {
     //   navigate("/");
     // });
 
-    addDoc(collection(db, "invoice"), {
-      date: date.toDateString(),
-      invoice_no: invoice,
-      name: name,
-      address: address,
-      email: email,
-      mobile: mobile,
-      qty: qty,
-      product: product,
-      product_price: productPrice,
-      advance: advance,
-      update: update,
-      delivery_charge: deliveryCharge,
-      delivery_company: deliveryCompany,
-      remark: remark,
-      first_followup: first_followup,
-      second_followup: second_followup,
-      third_followup: third_followup,
-      bkash_cost: bkashCost,
-      other: other,
-      deposit_to_account: depositToAccount,
-      time_stamp: serverTimestamp(),
-    })
-      .then(() => {
-        //Data save Successfully
-        console.log("data submitted");
-        navigate("/");
+    if (invoice == "") {
+      requiredFlag = false;
+      setEmptyErrorInvoice("Invoice can't be empty");
+    }
+    if (qty == "") {
+      requiredFlag = false;
+      setEmptyErrorQty("Qty can't be empty");
+    }
+    if (mobile == "") {
+      requiredFlag = false;
+      setEmptyErrorMobile("Mobile can't be empty");
+    }
+    if (name == "") {
+      requiredFlag = false;
+      setEmptyErrorName("Name can't be empty");
+    }
+
+    if (requiredFlag) {
+      addDoc(collection(db, "invoice"), {
+        date: date.toDateString(),
+        invoice_no: invoice,
+        name: name,
+        address: address,
+        email: email,
+        mobile: mobile,
+        qty: qty,
+        product: product,
+        product_price: productPrice,
+        advance: advance,
+        update: update,
+        delivery_charge: deliveryCharge,
+        delivery_company: deliveryCompany,
+        remark: remark,
+        first_followup: first_followup,
+        second_followup: second_followup,
+        third_followup: third_followup,
+        bkash_cost: bkashCost,
+        other: other,
+        deposit_to_account: depositToAccount,
+        time_stamp: serverTimestamp(),
       })
-      .catch((error) => {
-        //Failed
-        console.log(error);
-      });
-    console.log(new Date(date).toDateString());
+        .then(() => {
+          //Data save Successfully
+          console.log("data submitted");
+          navigate("/");
+        })
+        .catch((error) => {
+          //Failed
+          console.log(error);
+        });
+    } else console.log(emptyErrorInvoice);
   };
 
   return (
@@ -128,19 +152,33 @@ const Create = () => {
       </div> */}
       <div className="field">
         <label>Invoice No</label>
+        <span className="error"> *</span>
         <input
           type="number"
           placeholder="6"
-          onChange={(event) => setInvoice(event.target.value)}
+          onChange={(event) => {
+            setInvoice(event.target.value);
+            setEmptyErrorInvoice("");
+          }}
         />
+        <span className="error" aria-live="polite">
+          {emptyErrorInvoice}
+        </span>
       </div>
       <div className="field">
         <label>Name</label>
+        <span className="error"> *</span>
         <input
           type="text"
           placeholder="Arafat"
-          onChange={(event) => setName(event.target.value)}
+          onChange={(event) => {
+            setName(event.target.value);
+            setEmptyErrorName("");
+          }}
         />
+        <span className="error" aria-live="polite">
+          {emptyErrorName}
+        </span>
       </div>
       <div className="field">
         <label>Address</label>
@@ -160,19 +198,33 @@ const Create = () => {
       </div>
       <div className="field">
         <label>Mobile</label>
+        <span className="error"> *</span>
         <input
           type="number"
           placeholder="01777766332"
-          onChange={(event) => setMobile(event.target.value)}
+          onChange={(event) => {
+            setMobile(event.target.value);
+            setEmptyErrorMobile("");
+          }}
         />
+        <span className="error" aria-live="polite">
+          {emptyErrorMobile}
+        </span>
       </div>
       <div className="field">
         <label>QTY</label>
+        <span className="error"> *</span>
         <input
           type="number"
           placeholder="3"
-          onChange={(event) => setQty(event.target.value)}
+          onChange={(event) => {
+            setQty(event.target.value);
+            setEmptyErrorQty("");
+          }}
         />
+        <span className="error" aria-live="polite">
+          {emptyErrorQty}
+        </span>
       </div>
       <div className="field">
         <label>Product</label>

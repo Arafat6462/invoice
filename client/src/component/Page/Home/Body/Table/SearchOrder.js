@@ -3,6 +3,7 @@ import "./SearchOrder.css";
 
 const SearchOrder = ({ setSearchInput, setSearchField, searchField }) => {
   const options = [
+    "Invoice_No",
     "Name",
     "Date",
     "Email",
