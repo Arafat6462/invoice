@@ -21,8 +21,11 @@ import {
   limit,
   where,
   query,
+  startAt,
+  endAt,
 } from "firebase/firestore";
 import { db } from "../../../../config";
+import { async } from "@firebase/util";
 
 function Body({ columnName }) {
   const [invoiceList, setInvoiceList] = useState([]);
@@ -98,19 +101,64 @@ function Body({ columnName }) {
     getAllInvoice();
   }, [postPerPage]);
 
+  // Query
+  const queryOrder = async (searchField, searchInput) => {
+    console.log("call query order");
+
+    const CamelCase =
+      searchInput.charAt(0).toUpperCase() + searchInput.slice(1);
+
+    const data = await getDocs(
+      query(
+        collection(db, "invoice"),
+        orderBy(searchField, "asc"),
+        // where(searchField, "==", searchInput),
+        // startAt(searchInput)
+        // startAfter(searchInput)
+        // startAt(searchInput),
+        // endAt(searchInput)
+        // where(searchField, ">=", searchInput.upper()),
+        // where(searchField, "<=", searchInput.lower() + "\uf8ff"),
+        // stream()
+        // where(searchField, "in", [searchInput,"Maruf"])
+        // where("search", "array-contains-any", [searchInput,"Maruf"])
+        // where("name", startAt(searchInput))
+        // where("name", "==", "Arafat")
+
+        // where(searchField, ">=", searchInput),
+        // where(searchField, "<=", searchInput + "\uf8ff")
+        startAt(searchInput),
+        startAt(CamelCase),
+        // startAt(searchInput.toLowerCase()),
+        // startAt(searchInput.toUpperCase()),
+        endAt(searchInput + "~"),
+        endAt(CamelCase + "~"),
+        // endAt(searchInput.toLowerCase() + "~"),
+        // endAt(searchInput.toUpperCase() + "~")
+        // endAt(searchInput + "~")
+        // startAt(searchInputReverse),
+        // endAt(searchInputReverse + "~")
+      )
+    );
+
+    console.log(data);
+    setFilterInvoice(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  };
+
   // Filter order inside table
   useEffect(() => {
     if (searchField == "") setSearchField("name"); // in first load default search field
     if (searchInput == "") setFilterInvoice(invoiceList);
     else {
-      setFilterInvoice(
-        invoiceList.filter((invoice) => {
-          return invoice[`${searchField.toLowerCase()}`]
-            .toString()
-            .toLowerCase()
-            .includes(searchInput.toLowerCase());
-        })
-      );
+      // setFilterInvoice(
+      //   invoiceList.filter((invoice) => {
+      //     return invoice[`${searchField.toLowerCase()}`]
+      //       .toString()
+      //       .toLowerCase()
+      //       .includes(searchInput.toLowerCase());
+      //   })
+      // );
+      queryOrder(searchField.toLowerCase(), searchInput);
       setCurrentPage(1);
     }
   }, [searchInput, searchField]);
